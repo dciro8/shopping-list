@@ -10,6 +10,7 @@ import { Item } from '../../Models/Items';
 export class ItemsComponent implements OnInit {
 
   items: Item[]= [];
+  total: number =0;
   constructor() { }
 
   ngOnInit(): void {
@@ -27,9 +28,24 @@ export class ItemsComponent implements OnInit {
         title: 'Windows Home',
         price:3.9,
         quantity:6,
-        completed:true
+        completed:false
       }
     ];
+    this.getTotal();
   }
 
+  deleteItem(item:Item){
+    this.items = this.items.filter(x => x.id != item.id);
+    this.getTotal();
+  }
+  toggleItem(item:Item){
+    this.getTotal();
+  }
+  
+  getTotal(){
+
+    this.total=this.items.filter(x => !x.completed)
+    .map(x=> x.quantity * x.price)
+    .reduce((acc, x) => acc += x, 0);
+  }
 }
